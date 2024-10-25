@@ -6,18 +6,30 @@ function EmailForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ارسال داده به بک‌اند
+    const sheetId = "1K0hVmrYsf7Pw3ZRT58Te9KS46NWOTfXdNvX4U_yP2bI";
+    const apiKey = "AIzaSyAo4piZWmbcIn33fczNWBau81gs-zoyBNk";
+
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/FormResponses:append?valueInputOption=USER_ENTERED&key=${apiKey}`;
+
+    const body = {
+      values: [[new Date().toISOString(), email]],
+    };
+
     try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbwDEzRzvz_LH3yHIgfAcZqAFQ9iR9a10n5cTmIi4qy3mXWNQbYRRhvimq9Ea1l9nGO-cQ/exec", {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify(body),
       });
 
-      const data = await response.json();
-      console.log(data.message);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Data added successfully:", data);
+      } else {
+        console.error("Error:", response.statusText);
+      }
     } catch (error) {
       console.error("Error:", error);
     }
