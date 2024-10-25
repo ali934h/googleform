@@ -22,13 +22,14 @@ function App() {
         body: JSON.stringify(body),
       });
 
+      const responseData = await response.json(); // خواندن پاسخ به JSON
+      console.log("Response from worker:", responseData); // لاگ کردن پاسخ
+
       if (response.ok) {
-        const data = await response.json();
-        console.log("Data added successfully:", data);
         setMessage("ایمیل با موفقیت ارسال شد!");
         setEmail(""); // پاک کردن ایمیل بعد از ارسال
       } else {
-        console.error("Error:", response.statusText);
+        console.error("Error:", responseData);
         setMessage("خطا در ارسال ایمیل. لطفاً دوباره تلاش کنید.");
       }
     } catch (error) {
@@ -38,16 +39,19 @@ function App() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-        ایمیل
-      </label>
-      <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full p-2 border border-gray-300 rounded-md" />
-      <button type="submit" className="px-4 py-2 text-white bg-blue-500 rounded-md">
-        ارسال
-      </button>
-      {message && <p className="text-sm text-red-500">{message}</p>} {/* نمایش پیام */}
-    </form>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">فرم ارسال ایمیل</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          ایمیل
+        </label>
+        <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full p-2 border border-gray-300 rounded-md" />
+        <button type="submit" className="px-4 py-2 text-white bg-blue-500 rounded-md">
+          ارسال
+        </button>
+        {message && <p className="text-sm text-red-500">{message}</p>} {/* نمایش پیام */}
+      </form>
+    </div>
   );
 }
 
