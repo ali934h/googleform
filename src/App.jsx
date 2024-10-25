@@ -1,57 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-function App() {
+function MyForm() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     phoneNumber: "",
     email: "",
     message: "",
+    turnstileToken: "",
   });
-  const [turnstileToken, setTurnstileToken] = useState("");
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleTurnstileCallback = (token) => {
-    setTurnstileToken(token);
+    setFormData({ ...formData, turnstileToken: token });
   };
-
-  useEffect(() => {
-    // قرار دادن تابع در window برای دسترسی Turnstile
-    window.handleTurnstileCallback = handleTurnstileCallback;
-    return () => {
-      delete window.handleTurnstileCallback;
-    };
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!turnstileToken) {
-      alert("Please complete the security check.");
-      return;
-    }
-
     try {
       const response = await fetch("https://script.google.com/macros/s/AKfycbwDEzRzvz_LH3yHIgfAcZqAFQ9iR9a10n5cTmIi4qy3mXWNQbYRRhvimq9Ea1l9nGO-cQ/exec", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, "cf-turnstile-response": turnstileToken }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       });
-      if (response.ok) {
-        alert("Form submitted successfully!");
-        setFormData({
-          firstName: "",
-          lastName: "",
-          phoneNumber: "",
-          email: "",
-          message: "",
-        });
-      } else {
-        alert("Failed to submit form.");
-      }
+      const result = await response.json();
+      alert(result.message);
     } catch (error) {
       console.error("Error:", error);
       alert("There was an error submitting the form.");
@@ -59,20 +33,17 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Contact Us</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
-        <input type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required />
-        <input type="tel" name="phoneNumber" placeholder="Phone Number" value={formData.phoneNumber} onChange={handleChange} required />
-        <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
-        <textarea name="message" placeholder="Your Message" value={formData.message} onChange={handleChange} required></textarea>
+    <form onSubmit={handleSubmit}>
+      <input type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} />
+      <input type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} />
+      <input type="text" name="phoneNumber" placeholder="Phone Number" value={formData.phoneNumber} onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })} />
+      <input type="email" name="email" placeholder="Email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+      <textarea name="message" placeholder="Message" value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })}></textarea>
 
-        <div className="cf-turnstile" data-sitekey="0x4AAAAAAAyalHge0Gz924BM" data-callback="handleTurnstileCallback"></div>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+      <div className="cf-turnstile" data-sitekey="0x4AAAAAAAyalHge0Gz924BM" data-callback="handleTurnstileCallback"></div>
+      <button type="submit">Submit</button>
+    </form>
   );
 }
 
-export default App;
+export default MyForm;
