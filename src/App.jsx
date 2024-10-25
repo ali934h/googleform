@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function App() {
   const [formData, setFormData] = useState({
@@ -17,6 +17,14 @@ function App() {
   const handleTurnstileCallback = (token) => {
     setTurnstileToken(token);
   };
+
+  useEffect(() => {
+    // قرار دادن تابع در window برای دسترسی Turnstile
+    window.handleTurnstileCallback = handleTurnstileCallback;
+    return () => {
+      delete window.handleTurnstileCallback;
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,7 +68,7 @@ function App() {
         <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
         <textarea name="message" placeholder="Your Message" value={formData.message} onChange={handleChange} required></textarea>
 
-        <div className="cf-turnstile" data-sitekey="0x4AAAAAAAyalHge0Gz924BM"></div>
+        <div className="cf-turnstile" data-sitekey="0x4AAAAAAAyalHge0Gz924BM" data-callback="handleTurnstileCallback"></div>
         <button type="submit">Submit</button>
       </form>
     </div>
