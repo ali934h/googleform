@@ -10,7 +10,7 @@ function EmailForm() {
     };
 
     try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbwDEzRzvz_LH3yHIgfAcZqAFQ9iR9a10n5cTmIi4qy3mXWNQbYRRhvimq9Ea1l9nGO-cQ/exec", {
+      const response = await fetch("https://googleworker.kenconsidine90.workers.dev/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
