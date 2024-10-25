@@ -35,7 +35,7 @@ function App() {
     }
 
     try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbyW35CMild0gNqrbBeaSEEfjdhLJ9w36Q1j33ibt9Bt5awXuPlIbSOp0jh2r0uaxMeT4Q/exec", {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbwDEzRzvz_LH3yHIgfAcZqAFQ9iR9a10n5cTmIi4qy3mXWNQbYRRhvimq9Ea1l9nGO-cQ/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, "cf-turnstile-response": turnstileToken }),
