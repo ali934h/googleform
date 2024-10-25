@@ -27,7 +27,7 @@ function App() {
     }
 
     try {
-      const response = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbyW35CMild0gNqrbBeaSEEfjdhLJ9w36Q1j33ibt9Bt5awXuPlIbSOp0jh2r0uaxMeT4Q/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, "cf-turnstile-response": turnstileToken }),
@@ -60,7 +60,7 @@ function App() {
         <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
         <textarea name="message" placeholder="Your Message" value={formData.message} onChange={handleChange} required></textarea>
 
-        <div className="cf-turnstile" data-sitekey="YOUR_SITE_KEY"></div>
+        <div className="cf-turnstile" data-sitekey="0x4AAAAAAAyalHge0Gz924BM"></div>
         <button type="submit">Submit</button>
       </form>
     </div>
